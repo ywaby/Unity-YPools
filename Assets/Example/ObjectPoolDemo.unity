@@ -286,11 +286,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolsSet:
+  - tag: 
+    clearTime: 120
+    miniSize: 0
+    prefab: {fileID: 0}
   - tag: fdsf
     clearTime: 0
     miniSize: 0
     prefab: {fileID: 1381875625788336, guid: e5f245a22bada431db60d0f77b0ccd75, type: 2}
-  - tag: abc
+  - tag: qqabcf
     clearTime: 0
     miniSize: 0
     prefab: {fileID: 1065452203444202, guid: 09bc475a53ab443da97e24de76c3f628, type: 2}
