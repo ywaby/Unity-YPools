@@ -76,6 +76,7 @@ namespace YPools
                 for (int idx = 0; idx < poolsSet.Count; idx++)
                 {
                     EditorGUI.indentLevel = 2;
+                    // item control toolbar 
                     EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
                     if (!Application.isPlaying) //During Editor
                     {
@@ -86,6 +87,7 @@ namespace YPools
                         }
                     }
                     EditorGUILayout.EndHorizontal();
+                    // preview
                     EditorGUILayout.BeginHorizontal();
                     GUILayout.Space(12);
                     if (poolsSet[idx].prefab != null)
@@ -94,6 +96,7 @@ namespace YPools
                         prefabPreviewIcon = AssetPreview.GetAssetPreview(poolsSet[idx].prefab);
                         DrawTexture(prefabPreviewIcon, 50, 50);
                     }
+                    // set 
                     EditorGUILayout.BeginVertical(GUILayout.MinHeight(50));
                     if (!Application.isPlaying) //During Editor
                     {

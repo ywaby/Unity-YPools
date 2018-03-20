@@ -292,11 +292,11 @@ MonoBehaviour:
     prefab: {fileID: 0}
   - tag: fdsf
     clearTime: 0
-    miniSize: 0
+    miniSize: 10
     prefab: {fileID: 1381875625788336, guid: e5f245a22bada431db60d0f77b0ccd75, type: 2}
   - tag: qqabcf
     clearTime: 0
-    miniSize: 0
+    miniSize: 10
     prefab: {fileID: 1065452203444202, guid: 09bc475a53ab443da97e24de76c3f628, type: 2}
 --- !u!4 &1999776101
 Transform:

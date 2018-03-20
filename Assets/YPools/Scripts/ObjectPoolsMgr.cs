@@ -10,94 +10,129 @@ namespace YPools
     public class ObjectPoolsMgr : MonoBehaviour
     {
         // dict {tag, pool}
-        public Dictionary<string, ObjectPool> poolsDict = new Dictionary<string, ObjectPool>(); 
-        public List< ObjectPool> poolsSet = new List< ObjectPool>(); // for ui set
-        
-        // init dict here
-        void Start(){
-            foreach (ObjectPool item in poolsSet){
-                    poolsDict.Add(item.tag,item);
-            }
-        }
+        public Dictionary<string, ObjectPool> poolsDict = new Dictionary<string, ObjectPool>();
+        public List<ObjectPool> poolsSet = new List<ObjectPool>(); // for ui set
         [System.Serializable]
         public class ObjectPool
         {
-            public string tag ;
-            public float clearTime = 120; //s
-            private float clrDelay = 0;
+            public string tag;
+            public float clearTime = 120; //second
+            public float clrDelay = 0;
             public int miniSize = 0; // mini size for auto free
             public GameObject prefab;
-            private bool clr_flag = false;
-            Queue<GameObject> pool = new Queue<GameObject>();
-            void Start()
-            {
-                for (int i = 0; i < miniSize; i++)
-                {
-                    GameObject obj = Instantiate(prefab);
-                    obj.SetActive(false);
-                    pool.Enqueue(obj);
+            public bool clr_flag = false;
+            public Queue<GameObject> pool = new Queue<GameObject>();
+        }
 
-                }
-            }
-            void FixedUpdate()
+        void Awake()
+        {
+            foreach (ObjectPool item in poolsSet)
             {
-                if (pool.Count > miniSize)
-                {
-                    clr_flag = true;
-                    clrDelay += Time.deltaTime;
-                }
-                else
-                {
-                    clr_flag = false;
-                    clrDelay = 0;
-
-                }
-                if ((clrDelay > clearTime) && (clr_flag == true))
-                {
-
-                    clr_flag = false;
-                    ClearPool(pool.Count - miniSize);
-                }
-
-            }
-
-            public void ClearPool(int num)
-            {
-                for (int i = num; i > 0; i--)
-                {
-                    GameObject obj = pool.Dequeue();
-                    Destroy(obj);
-                }
-            }
-            public void ClearPool()
-            {
-                for (int i = pool.Count - 1; i > 0; i--)
-                {
-                    GameObject obj = pool.Dequeue();
-                    Destroy(obj);
-                }
-                pool = null;
-            }
-            public void BackPool(GameObject obj)
-            {
-                pool.Enqueue(obj);
-                obj.SetActive(false);
-            }
-            public GameObject SpawnFromPool()
-            {
-                GameObject obj = null;
-                if (pool.Count == 0)
-                {
-                    obj = Instantiate(prefab);
-                }
-                else
-                {
-                    obj = pool.Dequeue();
-                }
-                obj.SetActive(true);
-                return obj;
+                poolsDict.Add(item.tag, item);
             }
         }
+        // init dict here
+        void Start()
+        {
+            //add pools with code
+            foreach (KeyValuePair<string, ObjectPool> kvp in poolsDict)
+            {
+                for (int i = 0; i < kvp.Value.miniSize; i++)
+                {
+                    GameObject obj = GameObject.Instantiate(kvp.Value.prefab);
+                    obj.SetActive(false);
+                    obj.transform.parent = gameObject.transform;
+                    kvp.Value.pool.Enqueue(obj);
+                }
+            }
+        }
+        void FixedUpdate()
+        {
+            foreach (KeyValuePair<string, ObjectPool> kvp in poolsDict)
+            {
+                string tag = kvp.Key;
+                ObjectPool objectPool = kvp.Value;
+                if (objectPool.pool.Count > objectPool.miniSize)
+                {
+                    objectPool.clr_flag = true;
+                    objectPool.clrDelay += Time.deltaTime;
+                }
+                else
+                {
+                    objectPool.clr_flag = false;
+                    objectPool.clrDelay = 0;
+
+                }
+                if ((objectPool.clrDelay > objectPool.clearTime) && (objectPool.clr_flag == true))
+                {
+
+                    objectPool.clr_flag = false;
+                    ClearPool(tag, objectPool.pool.Count - objectPool.miniSize);
+                }
+            }
+        }
+        public void ClearPool(string tag, int num)
+        {
+            if (!poolsDict.ContainsKey(tag))
+            {
+                Debug.LogWarning("poolsDict not contain " + tag, gameObject);
+                return;
+            }
+            ObjectPool objectPool = poolsDict[tag];
+            for (int i = num; i > 0; i--)
+            {
+                GameObject obj = objectPool.pool.Dequeue();
+                Destroy(obj);
+            }
+        }
+        public void ClearPool(string tag)
+        {
+            if (!poolsDict.ContainsKey(tag))
+            {
+                Debug.LogWarning("poolsDict not contain " + tag, gameObject);
+                return;
+            }
+            ObjectPool objectPool = poolsDict[tag];
+            for (int i = objectPool.pool.Count - 1; i > 0; i--)
+            {
+                GameObject obj = objectPool.pool.Dequeue();
+                Destroy(obj);
+            }
+            poolsDict.Remove(tag);
+        }
+        public void BackPool(string tag, GameObject obj)
+        {
+            if (!poolsDict.ContainsKey(tag))
+            {
+                Debug.LogWarning("poolsDict not contain " + tag, gameObject);
+                return;
+            }
+            ObjectPool objectPool = poolsDict[tag];
+            objectPool.pool.Enqueue(obj);
+            obj.SetActive(false);
+        }
+        public GameObject SpawnFromPool(string tag)
+        {
+            if (!poolsDict.ContainsKey(tag))
+            {
+                Debug.LogWarning("poolsDict not contain " + tag, gameObject);
+                return null;
+            }
+            ObjectPool objectPool = poolsDict[tag];
+            GameObject obj = null;
+            if (objectPool.pool.Count == 0)
+            {
+                obj = Instantiate(objectPool.prefab);
+            }
+            else
+            {
+                obj = objectPool.pool.Dequeue();
+            }
+            obj.SetActive(true);
+            return obj;
+        }
+
+
 
     }
 }
