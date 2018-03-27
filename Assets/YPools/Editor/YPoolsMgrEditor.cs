@@ -11,7 +11,7 @@ namespace YPools
     {
         private ObjectPoolsMgr poolsMgr;
         private bool isRootExpanded = true;
-
+        public int barScale = 1;
         public static void DrawTexture(Texture tex)
         {
             if (tex == null)
@@ -55,21 +55,21 @@ namespace YPools
             int actionIdx = 0;
             EditorGUI.indentLevel = 0;
             poolsMgr = (ObjectPoolsMgr)target;
-            List<ObjectPoolsMgr.ObjectPool> poolsSet = poolsMgr.poolsSet;
+            List<ObjectPool> poolsSet = poolsMgr.poolsSet;
             EditorGUI.indentLevel = 1;
             EditorGUILayout.BeginHorizontal();
             isRootExpanded = EditorGUILayout.Foldout(isRootExpanded, string.Format("Pools ({0})", poolsSet.Count));
-            if (!Application.isPlaying) //During Editor
+            EditorGUILayout.EndHorizontal();
+            if (isRootExpanded)
             {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUI.BeginDisabledGroup(Application.isPlaying);
                 if (GUILayout.Button("Add", EditorStyles.toolbarButton, GUILayout.Width(32)))
                 {
                     ui_action = UI_Action.add;
                 }
-            }
-            EditorGUILayout.EndHorizontal();
-
-            if (isRootExpanded)
-            {
+                barScale = EditorGUILayout.IntField("bar scale", barScale);
+                EditorGUILayout.EndHorizontal();
                 EditorGUILayout.BeginVertical();
 
                 EditorGUILayout.BeginScrollView(Vector2.zero, GUILayout.Width(0), GUILayout.Height(0));
@@ -78,13 +78,10 @@ namespace YPools
                     EditorGUI.indentLevel = 2;
                     // item control toolbar 
                     EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
-                    if (!Application.isPlaying) //During Editor
+                    if (GUILayout.Button("Del", EditorStyles.toolbarButton, GUILayout.Width(32)))
                     {
-                        if (GUILayout.Button("Del", EditorStyles.toolbarButton, GUILayout.Width(32)))
-                        {
-                            actionIdx = idx;
-                            ui_action = UI_Action.remove;
-                        }
+                        actionIdx = idx;
+                        ui_action = UI_Action.remove;
                     }
                     EditorGUILayout.EndHorizontal();
                     // preview
@@ -92,36 +89,49 @@ namespace YPools
                     GUILayout.Space(12);
                     if (poolsSet[idx].prefab != null)
                     {
-                        Texture prefabPreviewIcon = null;
-                        prefabPreviewIcon = AssetPreview.GetAssetPreview(poolsSet[idx].prefab);
+                        Texture prefabPreviewIcon = AssetPreview.GetAssetPreview(poolsSet[idx].prefab);
                         DrawTexture(prefabPreviewIcon, 50, 50);
                     }
                     // set 
                     EditorGUILayout.BeginVertical(GUILayout.MinHeight(50));
-                    if (!Application.isPlaying) //During Editor
-                    {
-                        poolsSet[idx].tag = EditorGUILayout.TextField("tag", poolsSet[idx].tag);
-                        poolsSet[idx].prefab = (GameObject)EditorGUILayout.ObjectField("Prefab", poolsSet[idx].prefab, typeof(GameObject), false);
-                        poolsSet[idx].miniSize = EditorGUILayout.IntField("pool size", poolsSet[idx].miniSize);
-                        poolsSet[idx].clearTime = EditorGUILayout.FloatField("clear time", poolsSet[idx].clearTime);
-                    }
+                    poolsSet[idx].tag = EditorGUILayout.TextField("tag", poolsSet[idx].tag);
+                    poolsSet[idx].prefab = (GameObject)EditorGUILayout.ObjectField("Prefab", poolsSet[idx].prefab, typeof(GameObject), false);
+                    poolsSet[idx].clearTime = EditorGUILayout.FloatField("clear time", poolsSet[idx].clearTime);
+
+                    // EditorGUILayout.BeginHorizontal();
+                    poolsSet[idx].miniSize = EditorGUILayout.IntField("pool size", poolsSet[idx].miniSize);
+                    if (poolsSet[idx].miniSize == 0)
+                        GUILayout.Box("", GUILayout.Height(5), GUILayout.Width(1));
+                    else
+                        GUILayout.Box("", GUILayout.Height(5), GUILayout.Width(poolsSet[idx].miniSize / barScale));
+                    // EditorGUILayout.EndHorizontal();
+
+                    // EditorGUILayout.BeginHorizontal();
+                    if (poolsSet[idx].pool.Count == 0)
+                        GUILayout.Box("", GUILayout.Height(5), GUILayout.Width(1));
+                    else
+                        GUILayout.Box("", GUILayout.Height(5), GUILayout.Width(poolsSet[idx].pool.Count / barScale));
+                    EditorGUILayout.LabelField("in pool", poolsSet[idx].pool.Count.ToString());
+                    // EditorGUILayout.EndHorizontal();
+
                     EditorGUILayout.EndVertical();
                     EditorGUILayout.EndHorizontal();
                 }
                 EditorGUILayout.EndScrollView();
                 EditorGUILayout.EndVertical();
             }
+            EditorGUI.EndDisabledGroup();
             switch (ui_action)
             {
                 case UI_Action.add:
-                    poolsSet.Insert(actionIdx, new ObjectPoolsMgr.ObjectPool());
+                    poolsSet.Insert(actionIdx, new ObjectPool());
                     break;
                 case UI_Action.remove:
                     poolsSet.RemoveAt(actionIdx);
                     break;
                 default: break;
             }
-            if (GUI.changed)
+            if (GUI.changed && (!Application.isPlaying))
             {
                 EditorSceneManager.MarkSceneDirty(poolsMgr.gameObject.scene);
             }
