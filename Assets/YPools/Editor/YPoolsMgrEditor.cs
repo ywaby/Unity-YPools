@@ -64,7 +64,7 @@ namespace YPools
             {
                 EditorGUILayout.BeginHorizontal();
                 EditorGUI.BeginDisabledGroup(Application.isPlaying);
-                if (GUILayout.Button("Add", EditorStyles.toolbarButton, GUILayout.Width(32)))
+                if (GUILayout.Button("New Pool", EditorStyles.toolbarButton))
                 {
                     ui_action = UI_Action.add;
                 }
@@ -78,7 +78,7 @@ namespace YPools
                     EditorGUI.indentLevel = 2;
                     // item control toolbar 
                     EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
-                    if (GUILayout.Button("Del", EditorStyles.toolbarButton, GUILayout.Width(32)))
+                    if (GUILayout.Button("Del Pool", EditorStyles.toolbarButton))
                     {
                         actionIdx = idx;
                         ui_action = UI_Action.remove;

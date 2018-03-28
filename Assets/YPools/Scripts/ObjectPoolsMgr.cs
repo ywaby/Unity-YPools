@@ -49,7 +49,6 @@ namespace YPools
                         obj.transform.parent = gameObject.transform;
                         kvp.Value.pool.Enqueue(obj);
                     }
-
                 }
             }
         }

@@ -30,7 +30,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4699494256541926
 Transform:
   m_ObjectHideFlags: 1
@@ -127,4 +127,3 @@ MonoBehaviour:
   autoDestoryTime: 20
   upforce: 1
   sideforce: -1
-  tag: cube
