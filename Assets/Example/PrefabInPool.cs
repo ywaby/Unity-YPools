@@ -9,7 +9,7 @@ class PrefabInPool : MonoBehaviour
     public float upforce = 1f;
     public float sideforce = -1f;
     private ObjectPoolsMgr poolsMgr;
-    private string tag;
+    public string prefabName = "";
     void Start()
     {
         poolsMgr = ObjectPoolsMgr.instance;
@@ -20,14 +20,13 @@ class PrefabInPool : MonoBehaviour
         Vector3 force = new Vector3(xforce, yforce, zforce);
         GetComponent<Rigidbody>().velocity = force;
         StartCoroutine(AutoDestory());
-
     }
 
 
     IEnumerator AutoDestory()
     {
         yield return new WaitForSeconds(autoDestoryTime);
-        poolsMgr.BackPool(tag, gameObject);
+        poolsMgr.BackPool(prefabName, gameObject);
     }
 
 }

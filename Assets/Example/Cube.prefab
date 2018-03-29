@@ -127,3 +127,4 @@ MonoBehaviour:
   autoDestoryTime: 20
   upforce: 1
   sideforce: -1
+  prefabName: Cube

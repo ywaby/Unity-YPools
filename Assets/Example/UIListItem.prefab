@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 114466534492670654}
   - component: {fileID: 114163814567641392}
   m_Layer: 5
-  m_Name: control_item
+  m_Name: UIListItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -248,11 +248,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1465256928522788}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c30c4e23f34984b1b9c3db96219ad364, type: 3}
+  m_Script: {fileID: 11500000, guid: 99226ac21486c419884e4aa3e417d314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   refPool:
-    tag: 
     clearTime: 120
     clrDelay: 0
     miniSize: 0

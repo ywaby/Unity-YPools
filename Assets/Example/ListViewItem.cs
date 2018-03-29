@@ -1,16 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using YPools;
+using System.Collections.Generic;
 
-public class ListItem : MonoBehaviour
+public class ListViewItem : MonoBehaviour
 {
 
-    // Use this for initialization
     [HideInInspector]
     public ObjectPool refPool;
     [HideInInspector]    
     public ListView listview;
-    private int outsidePoolNum = 0;//todo
     private InputField spwanNumInput;
     private ObjectPoolsMgr poolsMgr;
 
@@ -21,10 +20,10 @@ public class ListItem : MonoBehaviour
         btn_sprawm.onClick.AddListener(OnBtnSpawn);
         poolsMgr = ObjectPoolsMgr.instance;
         Text tag = transform.Find("tag").GetComponent<Text>();
-        tag.text = refPool.tag;
+        tag.text = refPool.prefab.name;
     }
     void OnBtnSpawn()
     {
-        poolsMgr.Spawns(refPool.tag, int.Parse(spwanNumInput.text));
+        poolsMgr.Spawns(refPool.prefab.name, int.Parse(spwanNumInput.text));
     }
 }

@@ -8,19 +8,19 @@ public class ListView : MonoBehaviour
 {
 
     // Use this for initialization
-	public GameObject itemPrefab;
+	public GameObject listViewItemPrefab;
 	public int scale = 10;
     private ObjectPoolsMgr poolsMgr;
     void Start()
     {
         poolsMgr = ObjectPoolsMgr.instance;
-        foreach (KeyValuePair<string, ObjectPool> kvp in poolsMgr.poolsDict)
+        foreach (var pool in poolsMgr.pools)
         {
-			GameObject item = Instantiate(itemPrefab);
-            item.transform.SetParent(transform);
-			ListItem itemCtl= item.GetComponent<ListItem>();
-			itemCtl.refPool = kvp.Value;
-			itemCtl.listview = this;
+			GameObject listViewItem = Instantiate(listViewItemPrefab);
+            listViewItem.transform.SetParent(transform);
+			ListViewItem listItemCls= listViewItem.GetComponent<ListViewItem>();
+			listItemCls.refPool = pool;
+			listItemCls.listview = this;
             
         }
     }

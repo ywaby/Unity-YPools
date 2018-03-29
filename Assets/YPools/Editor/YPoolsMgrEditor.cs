@@ -55,10 +55,10 @@ namespace YPools
             int actionIdx = 0;
             EditorGUI.indentLevel = 0;
             poolsMgr = (ObjectPoolsMgr)target;
-            List<ObjectPool> poolsSet = poolsMgr.poolsSet;
+            List<ObjectPool> pools = poolsMgr.pools;
             EditorGUI.indentLevel = 1;
             EditorGUILayout.BeginHorizontal();
-            isRootExpanded = EditorGUILayout.Foldout(isRootExpanded, string.Format("Pools ({0})", poolsSet.Count));
+            isRootExpanded = EditorGUILayout.Foldout(isRootExpanded, string.Format("Pools ({0})", pools.Count));
             EditorGUILayout.EndHorizontal();
             if (isRootExpanded)
             {
@@ -73,7 +73,7 @@ namespace YPools
                 EditorGUILayout.BeginVertical();
 
                 EditorGUILayout.BeginScrollView(Vector2.zero, GUILayout.Width(0), GUILayout.Height(0));
-                for (int idx = 0; idx < poolsSet.Count; idx++)
+                for (int idx = 0; idx < pools.Count; idx++)
                 {
                     EditorGUI.indentLevel = 2;
                     // item control toolbar 
@@ -87,31 +87,30 @@ namespace YPools
                     // preview
                     EditorGUILayout.BeginHorizontal();
                     GUILayout.Space(12);
-                    if (poolsSet[idx].prefab != null)
+                    if (pools[idx].prefab != null)
                     {
-                        Texture prefabPreviewIcon = AssetPreview.GetAssetPreview(poolsSet[idx].prefab);
+                        Texture prefabPreviewIcon = AssetPreview.GetAssetPreview(pools[idx].prefab);
                         DrawTexture(prefabPreviewIcon, 50, 50);
                     }
                     // set 
                     EditorGUILayout.BeginVertical(GUILayout.MinHeight(50));
-                    poolsSet[idx].tag = EditorGUILayout.TextField("tag", poolsSet[idx].tag);
-                    poolsSet[idx].prefab = (GameObject)EditorGUILayout.ObjectField("Prefab", poolsSet[idx].prefab, typeof(GameObject), false);
-                    poolsSet[idx].clearTime = EditorGUILayout.FloatField("clear time", poolsSet[idx].clearTime);
+                    pools[idx].prefab = (GameObject)EditorGUILayout.ObjectField("Prefab", pools[idx].prefab, typeof(GameObject), false);
+                    pools[idx].clearTime = EditorGUILayout.FloatField("clear time", pools[idx].clearTime);
 
                     // EditorGUILayout.BeginHorizontal();
-                    poolsSet[idx].miniSize = EditorGUILayout.IntField("pool size", poolsSet[idx].miniSize);
-                    if (poolsSet[idx].miniSize == 0)
+                    pools[idx].miniSize = EditorGUILayout.IntField("pool size", pools[idx].miniSize);
+                    if (pools[idx].miniSize == 0)
                         GUILayout.Box("", GUILayout.Height(5), GUILayout.Width(1));
                     else
-                        GUILayout.Box("", GUILayout.Height(5), GUILayout.Width(poolsSet[idx].miniSize / barScale));
+                        GUILayout.Box("", GUILayout.Height(5), GUILayout.Width(pools[idx].miniSize / barScale));
                     // EditorGUILayout.EndHorizontal();
 
                     // EditorGUILayout.BeginHorizontal();
-                    if (poolsSet[idx].pool.Count == 0)
+                    if (pools[idx].poolQ.Count == 0)
                         GUILayout.Box("", GUILayout.Height(5), GUILayout.Width(1));
                     else
-                        GUILayout.Box("", GUILayout.Height(5), GUILayout.Width(poolsSet[idx].pool.Count / barScale));
-                    EditorGUILayout.LabelField("in pool", poolsSet[idx].pool.Count.ToString());
+                        GUILayout.Box("", GUILayout.Height(5), GUILayout.Width(pools[idx].poolQ.Count / barScale));
+                    EditorGUILayout.LabelField("in pool", pools[idx].poolQ.Count.ToString());
                     // EditorGUILayout.EndHorizontal();
 
                     EditorGUILayout.EndVertical();
@@ -124,10 +123,10 @@ namespace YPools
             switch (ui_action)
             {
                 case UI_Action.add:
-                    poolsSet.Insert(actionIdx, new ObjectPool());
+                    pools.Insert(actionIdx, new ObjectPool());
                     break;
                 case UI_Action.remove:
-                    poolsSet.RemoveAt(actionIdx);
+                    pools.RemoveAt(actionIdx);
                     break;
                 default: break;
             }

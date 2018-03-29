@@ -115,6 +115,7 @@ MonoBehaviour:
   autoDestoryTime: 20
   upforce: 0.1
   sideforce: -0.1
+  prefabName: spe
 --- !u!135 &135943525762170450
 SphereCollider:
   m_ObjectHideFlags: 1
