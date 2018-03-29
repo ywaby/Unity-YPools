@@ -42,7 +42,8 @@ namespace YPools
             for (int idx = 0; idx < pools.Count; idx++)
             {
                 ObjectPool pool = pools[idx];
-                GameObject subContain = Instantiate(new GameObject(pool.prefab.name), transform);
+                GameObject subContain = new GameObject(pool.prefab.name);
+                subContain.transform.parent = transform;
                 for (int i = 0; i < pool.miniSize; i++)
                 {
                     var obj = Instantiate(pool.prefab, subContain.transform);

@@ -1,16 +1,9 @@
 unity dymanic object pools
 
-screenShot
-![mgr](./docs/YPoolsMgr.jpg)
-![mgr](./docs/run.jpg)
+![mgr](./docs/demo.gif)
+
 ## todo
-
-
-- doc
-- 性能优化，nativearray ijob
+- filter ui in PoolMgr inspector
+- use nativearray ijob for more effect
 - use simple dict when unity support
-- filter ui
-- 笔记整理
 
-
-## bug 
