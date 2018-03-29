@@ -38,14 +38,14 @@ namespace YPools
         }
 
         void Start()
-        {            
+        {
             for (int idx = 0; idx < pools.Count; idx++)
             {
                 ObjectPool pool = pools[idx];
-                GameObject subContain = Instantiate(new GameObject(pool.prefab.name),gameObject.transform);
+                GameObject subContain = Instantiate(new GameObject(pool.prefab.name), transform);
                 for (int i = 0; i < pool.miniSize; i++)
                 {
-                    var obj = Instantiate(pool.prefab,subContain.transform);
+                    var obj = Instantiate(pool.prefab, subContain.transform);
                     obj.SetActive(false);
                     pool.poolQ.Enqueue(obj);
                 }
@@ -143,10 +143,9 @@ namespace YPools
                 return null;
             }
             GameObject obj = null;
-            if ((objectPool.poolQ.Count == 0) && (objectPool.prefab != null))
+            if (objectPool.poolQ.Count == 0) 
             {
-                obj = Instantiate(objectPool.prefab);
-                obj.transform.parent = gameObject.transform;
+                obj = Instantiate(objectPool.prefab, transform.Find(prefabName));
             }
             else
             {
@@ -169,8 +168,7 @@ namespace YPools
             {
                 if (objectPool.poolQ.Count == 0)
                 {
-                    obj = Instantiate(objectPool.prefab);
-                    obj.transform.parent = gameObject.transform;
+                    obj = Instantiate(objectPool.prefab, transform.Find(prefabName));
                 }
                 else
                 {

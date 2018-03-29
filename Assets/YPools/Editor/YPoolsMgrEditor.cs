@@ -63,12 +63,15 @@ namespace YPools
             if (isRootExpanded)
             {
                 EditorGUILayout.BeginHorizontal();
+                barScale = EditorGUILayout.IntField("bar scale", barScale);
+                EditorGUILayout.EndHorizontal();
+                
+                EditorGUILayout.BeginHorizontal();
                 EditorGUI.BeginDisabledGroup(Application.isPlaying);
                 if (GUILayout.Button("New Pool", EditorStyles.toolbarButton))
                 {
                     ui_action = UI_Action.add;
                 }
-                barScale = EditorGUILayout.IntField("bar scale", barScale);
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.BeginVertical();
 
